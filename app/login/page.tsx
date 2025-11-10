@@ -13,8 +13,10 @@ export default function Login() {
         <div>
             <h1>Hello world</h1>
             <form action={loginAction}>
-                <Input type="email" placeholder="Email" name="email"></Input>
+                <Input type="text" placeholder="Email" name="email"></Input>
                 <Input type="password" placeholder="Password" name="password"></Input>
+                <h1>{state?.error}</h1>
+                <button type="submit">Submit</button>
             </form>
         </div>
     );
