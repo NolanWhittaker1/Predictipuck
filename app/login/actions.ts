@@ -1,8 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { supabase } from "../lib/supabaseClient";
-
+import { createClient } from "../utils/supabase/server";
 export async function login(prevState: any , formData: FormData) {
     const email = formData.get('email');
     const password = formData.get('password');
@@ -13,16 +12,21 @@ export async function login(prevState: any , formData: FormData) {
         }
     }
 
+    const supabase = await createClient();
+
+    
     const { data, error } = await supabase.auth.signInWithPassword({
         email: (email as string),
         password: (password as string),
     })
 
-    if(error) {
+    if(error || !data.session?.access_token) {
         return {
             error: "Invalid username or password."
         }
     }
+    
+
 
     redirect('/');
 }

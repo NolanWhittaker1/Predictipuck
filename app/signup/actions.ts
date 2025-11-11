@@ -1,8 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { supabase } from "../lib/supabaseClient";
-
+import { createClient } from "../utils/supabase/client";
 export async function signup(prevState: any , formData: FormData) {
     const form_username = formData.get('username');
     const form_email = formData.get('email');
@@ -14,7 +13,9 @@ export async function signup(prevState: any , formData: FormData) {
             error: "Please input all the required fields"
         }
     }
-
+    
+    const supabase = createClient();
+    
     const {data, error} = await supabase.auth.signUp({
         email: (form_email as string),
         password: (form_password as string),
@@ -25,14 +26,13 @@ export async function signup(prevState: any , formData: FormData) {
             }
         } 
     })
+    
 
     if(error) {
         return {
             error: "error has occured."
         }
     }
-
-
     
 
     redirect('/');
