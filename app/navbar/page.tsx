@@ -15,8 +15,8 @@ export default function Navbar() {
   }
 
     return (
-        <div className="flex flex-row top-0">
-            <button onClick={handleLogout} className="bg-blue-300 p-2">Logout</button>
+        <div>
+            
         </div>
     );
 }
