@@ -1,0 +1,37 @@
+steps:
+  # 1. Access the single secret, extract its variables, and run the Docker build
+  - id: "Inject Secrets and Docker Build"
+    # Use the Google Cloud SDK builder, as it includes the gcloud command
+    # and typically includes 'jq' for JSON parsing.
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "bash"
+    secretEnv: ["SUPABASE_CONFIG"]
+    args:
+      - "-c"
+      - |
+        # Store the JSON content fetched by Cloud Build
+        SECRET_JSON="$$SUPABASE_CONFIG"
+
+        # Extract the individual key/URL values using jq
+        SUPABASE_URL=$(echo $SECRET_JSON | jq -r '.NEXT_PUBLIC_SUPABASE_URL')
+        SUPABASE_KEY=$(echo $SECRET_JSON | jq -r '.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY')
+
+        # Run the Docker build, passing the extracted values as --build-arg
+        # IMPORTANT: Use the full substitution variables like ${_AR_HOSTNAME} from the trigger
+        docker build . \
+          --tag "${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:${SHORT_SHA}" \
+          --build-arg "NEXT_PUBLIC_SUPABASE_URL=$SUPABASE_URL" \
+          --build-arg "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$SUPABASE_KEY"
+
+# --------------------------------------------------------------------------
+
+# 1. availableSecrets: Maps the Secret Manager Resource Name to an environment variable.
+availableSecrets:
+  secretManager:
+    - versionName: "projects/388786622617/secrets/Predictipucksecret/versions/latest"
+      env: "SUPABASE_CONFIG"
+
+# 2. secrets: Authorizes Cloud Build to fetch the secret using its display name.
+secrets:
+  - secretEnv:
+      SUPABASE_CONFIG: "Predictipucksecret"
