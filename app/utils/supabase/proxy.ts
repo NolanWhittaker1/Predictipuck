@@ -29,7 +29,6 @@ export async function updateSession(request: NextRequest) {
   // IMPORTANT: Don't remove getClaims()
   const { data } = await supabase.auth.getClaims()
   const user = data?.claims
-  console.log(user);
   if (
     (request.nextUrl.pathname.startsWith('/predict') && !user) ||
     (request.nextUrl.pathname.startsWith('/profile') && !user)
