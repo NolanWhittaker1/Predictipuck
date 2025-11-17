@@ -15,8 +15,12 @@ export default function Navbar() {
   }
 
     return (
-        <div className="flex flex-row top-0">
-            <button onClick={handleLogout} className="bg-blue-300 p-2">Logout</button>
+        <div className="flex flex-row top-0 space-x-4">
+            <a href="/">Home</a>
+            <a href="/predict">Predict</a>
+            <a href="/profile">Profile</a>
+            <a href="/login">Login</a>
+            <h1 onClick={() => handleLogout()}>Logout</h1>
         </div>
     );
 }
