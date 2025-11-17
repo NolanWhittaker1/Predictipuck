@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { signup } from "./actions";
+import Navbar from "../navbar/page";
 
 export default function Signup() {
     const nhlTeams = ["ANA","BOS","BUF","CAR","CBJ","CGY","CHI","COL","DAL","DET","EDM","FLA","LAK","MIN","MTL","NJD","NSH","NYI","NYR","OTT","PHI","PIT","SEA","SJS","STL","TBL","TOR","UTA","VAN","VGK","WPG","WSH"];
@@ -9,6 +10,8 @@ export default function Signup() {
     const [favteam, setFavTeam] = useState('ANA');
 
     return (
+        <>
+        <Navbar></Navbar>
         <div className="w-screen h-screen flex justify-center items-center">
             <div className="w-1/2 h-full flex items-center justify-center bg-blue-200">
                 <img src="quinn_hughes.png"></img>
@@ -37,5 +40,6 @@ export default function Signup() {
             </form>
             </div>
         </div>
+        </>
     );
 }

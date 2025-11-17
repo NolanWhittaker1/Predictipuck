@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { login } from "./actions";
+import Navbar from "../navbar/page";
 
 export default function Login() {
 
@@ -10,6 +11,7 @@ export default function Login() {
 
     return (
         <div className="w-screen h-screen flex flex-row">
+             <Navbar></Navbar>
             <div className="justify-center items-center w-1/2 h-auto bg-blue-200 hidden xs:hidden sm:hidden md:flex lg:flex xl:flex">
                 <img src="./z_transparent.png"></img>
             </div>

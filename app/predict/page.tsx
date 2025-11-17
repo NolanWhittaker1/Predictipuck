@@ -2,6 +2,7 @@
 import { createClient } from "../utils/supabase/client";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import Navbar from "../navbar/page";
 
 interface gameFormat {
   game_id: string;
@@ -19,7 +20,7 @@ interface pickFormat {
 export default function Predict() {
   const supabase = createClient();
   const [games, setGames] = useState<gameFormat[]>([]);
-  const [picks, setPicks] = useState<pickFormat[]>([])  
+  const [picks, setPicks] = useState<pickFormat[]>([]);  
 
   useEffect(() => {
     const current_date = new Date();
@@ -95,6 +96,8 @@ export default function Predict() {
 
 
   return (
+    <>
+    <Navbar></Navbar>
     <div className="w-screen min-h-screen h-fit flex justify-center items-center">
       <div className="w-1/3 h-fit border-2 border-blue-500 p-2 rounded-3xl">
         {games.map((game) => (
@@ -107,5 +110,7 @@ export default function Predict() {
         <button className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => submitPicks()}>Submit Picks</button>
       </div>
     </div>
+    </>
+    
   );
 }
