@@ -3,6 +3,9 @@ import { createClient } from "../utils/supabase/client";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import Navbar from "../navbar/page";
+import {Chart, ArcElement, Tooltip} from 'chart.js';
+import {Doughnut} from 'react-chartjs-2'
+import CountUp from "react-countup";
 
 interface predictionFormat {
     game_id: string,
@@ -15,7 +18,10 @@ export default function Profile() {
     const [username, setUsername] = useState('unknown');
     const [favteam, setFavteam] = useState('VAN');
     const [userp, setUserp] = useState<predictionFormat[]>([]);
-
+    const [correctPer, setCorrectPer] = useState(0.00);
+    
+    Chart.register(ArcElement);
+    Chart.register(Tooltip);
 
     useEffect(() => {
         const fetchdata = async () => {
@@ -47,7 +53,7 @@ export default function Profile() {
             if(!results) {
                 return;
             }
-            
+            let count = 0
             const temp = predictions
             .filter(prediction => {
                 // keep only predictions that have a matching result
@@ -55,7 +61,9 @@ export default function Profile() {
             })
             .map(prediction => {
                 const result = results.find(r => r.game_id === prediction.game_id);
-
+                if(prediction.team_picked === result.winner) {
+                    count++;
+                }
                 return {
                     game_id: prediction.game_id,
                     team_picked: prediction.team_picked,
@@ -65,7 +73,7 @@ export default function Profile() {
             console.log(temp);
             temp.sort((a, b) => a.game_id- b.game_id);
             setUserp(temp);
-        
+            setCorrectPer(count);
         }
 
         fetchdata();
@@ -73,23 +81,55 @@ export default function Profile() {
     }, [])
     
     return (
-        <>
+        <div className="bg-blue-300">
         <Navbar></Navbar>
         <div className="w-screen h-screen flex justify-center items-center">
-            <div className="w-3/4 h-3/4 flex flex-col border border-blue-300">
-                <div className="flex flex-row justify-end items-center space-x-4"><h1>{username}</h1><img className="w-15 h-15" src={`https://assets.nhle.com/logos/nhl/svg/${favteam}_light.svg`}></img></div>
-                <div className="flex flex-col">
-                    <h1>Predictions</h1>
-                    {userp.map((pred) => (
-                        <div key={pred.game_id} className="flex flex-row space-x-2">
-                            <div>{pred.game_id}</div>
-                            <div>{pred.team_picked}</div>
-                            <div>{pred.correct_pick ? "Correct" : "Incorrect"}</div>
-                        </div>
-                    ))}
+            <div className="w-3/4 h-3/4 flex flex-col border border-blue-300 rounded-3xl bg-white">
+                <div className="flex flex-row justify-start items-center space-x-4"><img className="w-15 h-15" src={`https://assets.nhle.com/logos/nhl/svg/${favteam}_light.svg`}></img><h1>Hello, {username}</h1></div>
+                
+                <div className="flex flex-row h-full w-full items-center justify-around">
+                    <div className="flex flex-col h-fit w-1/4 text-center justify-center items-center">
+                        <h1>Predictions</h1>
+                        {userp.map((pred) => (
+                            <div key={pred.game_id} className="flex flex-row space-x-2">
+                                <div>{pred.game_id}</div>
+                                <div>{pred.team_picked}</div>
+                                <div>{pred.correct_pick ? "Correct" : "Incorrect"}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex flex-col items-center justify-center h-full w-1/4 text-center">
+                        <div className="top-0">Correct Picks</div>
+                        <Doughnut
+                            data={{
+                                labels: ["Correct", "Incorrect"],
+                                datasets: [
+                                {
+                                    label: "meow",
+                                    data: [correctPer, userp.length - correctPer],
+                                    backgroundColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(54, 162, 235)'
+                                    ],
+                                    hoverOffset: 4
+                                }
+                                ],
+                                
+                                
+                            }}
+                        />
+                    </div>
+                    <div className="flex flex-col items-center justify-center h-full w-1/4 text-center">
+                        <div className="top-0">Number of Picks</div>
+                        <CountUp
+                            end={userp.length}
+                            duration={5}
+                        />
+                        
+                    </div>
                 </div>
             </div>
         </div>
-        </>
+        </div>
     );
 }

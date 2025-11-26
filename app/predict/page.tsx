@@ -100,23 +100,23 @@ export default function Predict() {
 
 
   return (
-    <>
-    <Navbar></Navbar>
-    <div className="w-screen min-h-screen h-fit flex justify-center items-center">
-      <div className="w-fit min-w-1/3 h-fit border-2 border-blue-500 p-2 rounded-3xl">
-        {games.map((game) => (
-          <div key={game.game_id} className="flex flex-row justify-between items-center space-x-4 space-y-2 p-1">
-            <img onClick={() => updatePick(game.game_id, game.away_team)} className={`h-20 w-20 hover:cursor-pointer ${picks.some(p => p.team_picked.includes(game.away_team)) ? "border-2 border-green-500" : "border-none"}`} src={`https://assets.nhle.com/logos/nhl/svg/${game.away_team}_light.svg`} alt="Team"></img>
-            <h1>{game.away_record}</h1>
-            <h1>vs</h1>
-            <h1>{game.home_record}</h1>
-            <img onClick={() => updatePick(game.game_id, game.home_team)} className={`h-20 w-20 hover:cursor-pointer ${picks.some(p => p.team_picked.includes(game.home_team)) ? "border-2 border-green-500" : "border-none"}`}src={`https://assets.nhle.com/logos/nhl/svg/${game.home_team}_light.svg`}></img>
-          </div>
-        ))}
-        <button className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => submitPicks()}>Submit Picks</button>
+    <div className="bg-blue-300">
+      <Navbar></Navbar>
+      <div className="w-screen min-h-screen h-fit flex justify-center items-center">
+        <div className="w-fit min-w-1/3 h-fit border-3 border-blue-500 p-2 rounded-3xl bg-white space-y-2">
+          {games.map((game) => (
+            <div key={game.game_id} className="flex flex-row justify-between items-center space-x-4 space-y-2 p-1">
+              <img onClick={() => updatePick(game.game_id, game.away_team)} className={`h-20 w-20 hover:cursor-pointer ${picks.some(p => p.team_picked.includes(game.away_team)) ? "border-2 border-green-500" : "border-none"}`} src={`https://assets.nhle.com/logos/nhl/svg/${game.away_team}_light.svg`} alt="Team"></img>
+              <h1>{game.away_record}</h1>
+              <h1>vs</h1>
+              <h1>{game.home_record}</h1>
+              <img onClick={() => updatePick(game.game_id, game.home_team)} className={`h-20 w-20 hover:cursor-pointer ${picks.some(p => p.team_picked.includes(game.home_team)) ? "border-2 border-green-500" : "border-none"}`}src={`https://assets.nhle.com/logos/nhl/svg/${game.home_team}_light.svg`}></img>
+            </div>
+          ))}
+          <button className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => submitPicks()}>Submit Picks</button>
+        </div>
       </div>
     </div>
-    </>
     
   );
 }

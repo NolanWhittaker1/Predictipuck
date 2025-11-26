@@ -10,8 +10,9 @@ export default function Login() {
     const [favteam, setFavTeam] = useState('ANA');
 
     return (
-        <div className="w-screen h-screen flex flex-row">
-             <Navbar></Navbar>
+        <>
+            <Navbar></Navbar>
+            <div className="w-screen h-screen flex flex-row">
             <div className="justify-center items-center w-1/2 h-auto bg-blue-200 hidden xs:hidden sm:hidden md:flex lg:flex xl:flex">
                 <img src="./z_transparent.png"></img>
             </div>
@@ -27,5 +28,7 @@ export default function Login() {
                 </form>
             </div>
         </div>
+        </>
+        
     );
 }
