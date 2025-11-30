@@ -6,6 +6,8 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+# ARG definitions are placed here to ensure they catch the initial build-args,
+# although they aren't strictly necessary for this stage, it helps keep things consistent.
 ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
@@ -22,6 +24,11 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# VITAL FIX: Redefine ARGs here so the values passed via --build-arg
+# are available in this stage for 'npm run build'.
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -43,6 +50,22 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+# VITAL: To ensure the secrets are available at RUNTIME in the final image, 
+# you should typically define them as ENV variables here. However, since
+# you are using Next.js's standalone output, these are often baked into 
+# the server.js file if they were present during build.
+
+# If the secrets are only needed during the build (prerendering/SSG), 
+# this stage is fine as is. If they are needed for runtime SSR/API routes, 
+# you must expose them as ENV variables here, and Cloud Build must pass them
+# as ENV variables to the final container environment (e.g., in a deployment manifest).
+
+
+# Uncomment and use this if the secrets are also required at runtime for SSR/API routes:
+ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+ENV NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+
+
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED=1
 

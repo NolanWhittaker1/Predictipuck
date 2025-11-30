@@ -25,33 +25,30 @@ export default function Navbar() {
         }, [])
 
     const handleLogout = async () => {
-        // 1. Initialize the client-side Supabase instance
         const supabase = createClient()
 
-        // 2. Call the signOut method
         const { error } = await supabase.auth.signOut()
         
         redirect('/login');
     }
 
     return (
-        <div className="flex flex-row items-center justify-between w-full px-4 py-2">
+        <div className="flex flex-row items-center justify-between w-full px-8 py-4 bg-ghostwhite">
             {/* Predictipuck - Aligned to the far left */}
-            <a href="/" className="text-xl font-bold text-white"><img className="h-15 w-fit" src="/logo_transparent.png"></img></a>
+            <a href="/" className="text-xl font-semibold text-black flex flex-row items-center">Puckpredictor</a>
             
             {/* Main Navigation Links - Grouped in the middle */}
-            <div className="flex space-x-4">
-                <a href="/stats" className="w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Stats</a>
-                <a href="/predict" className="w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Predict</a>
-                <a href="/leaderboard" className="w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Leaderboard</a>
-                <a href="/profile" className="w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Profile</a>
+            <div className="flex space-x-10 font-semibold">
+                <a href="/predict">Predict</a>
+                <a href="/leaderboard">Leaderboard</a>
+                <a href="/profile">Profile</a>
             </div>
             
             {/* Login/Logout - Aligned to the far right */}
             {isLogged ? (
                 <button 
-                    type="button" // Changed h1 to button for semantic correctness
-                    className="w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
+                    type="button" 
+                    className="font-semibold cursor-pointer"
                     onClick={() => handleLogout()}
                 >
                     Logout
@@ -59,7 +56,7 @@ export default function Navbar() {
             ) : (
                 <a 
                     href="/login" 
-                    className="w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    className="font-semibold cursor-pointer"
                 >
                     Login
                 </a>
